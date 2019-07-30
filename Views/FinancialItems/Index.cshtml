@@ -1,0 +1,68 @@
+﻿@model TenXOne.ViewModels.FinancialItemsViewModel
+@{
+    ViewData["Title"] = "Financial Items";
+}
+@section Scripts {
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery-ajax-unobtrusive.js"></script>
+    <script>
+        // Set selected partner at edit dropdown
+        $(document).on('click', '.edit-financial-item', function() {
+            $('[data-partner-select-num="' + $(this).data('item-num') + '"]').val($(this).data('selected-partner-id'));
+        });
+
+        function hideModal() {
+            $('.modal-backdrop').remove();
+        }
+    </script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+<div class="financial-items-container">
+    <div class="page-header">
+        <h1>@ViewData["Title"]</h1>
+        <button 
+            class="new-item-btn btn btn-warning" 
+            data-toggle="collapse" 
+            data-target="#new-financial-item" 
+            aria-expanded="false" 
+            aria-controls="#new-financial-item">
+            <i class="fa fa-plus-square fa-2x"></i>
+        </button>
+    </div>
+    <div class="collapse" id="new-financial-item">
+        <form asp-action="Create" asp-controller="FinancialItems"
+            data-ajax="true"
+            data-ajax-method="POST"
+            data-ajax-mode="replace"
+            data-ajax-update="#financial-items-list">
+            @await Html.PartialAsync("_FinancialItemFormPartial")
+        </form>
+    </div>
+    <div class="item-list-container container mt-4">
+        <div class="row">
+            <table class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            #
+                        </th>
+                        <th scope="col">
+                            Partner
+                        </th>
+                        <th scope="col">
+                            Date
+                        </th>
+                        <th scope="col">
+                            Amount
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="financial-items-list">
+                    @await Html.PartialAsync("_FinancialItemsListPartial")
+                </tbody>            
+            </table>
+        </div>
+    </div>
+</div>
