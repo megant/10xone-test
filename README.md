@@ -6,4 +6,4 @@ The project was made with .NET Core 2.2.4, so you need compatible dotnet CLI or 
 
 ## Known bugs
 
-The datepicker does not accept the given dateformat, so does not show the date of a previously stored financial item.
+The datepicker does not accept the given dateformat, so does not show the date of a previously stored financial item. 
