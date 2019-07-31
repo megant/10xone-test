@@ -53,5 +53,15 @@ namespace TenXOne.Controllers
             viewModel.Partners = _financialItemsService.GetAllPartners();
             return PartialView( "_FinancialItemsListPartial", viewModel);
         }
+
+        [HttpDelete]
+        public IActionResult DeleteAll()
+        {
+            _financialItemsService.DeleteAllItems();
+            var viewModel = new FinancialItemsViewModel();
+            viewModel.FinancialItems = _financialItemsService.GetAllItems();
+            viewModel.Partners = _financialItemsService.GetAllPartners();
+            return PartialView( "_FinancialItemsListPartial", viewModel);
+        }
     }
 }

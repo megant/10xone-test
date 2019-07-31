@@ -56,5 +56,9 @@ namespace TenXOne.Services
         public void DeleteItem(Guid itemID) {
             _financialItemsRepository.DeleteFinancialItem(itemID);
         }
+
+        public void DeleteAllItems() {
+            _financialItemsRepository.DeleteAllFinancialItems();
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.Collections;
 
 namespace TenXOne.Models.Repositories
 {
@@ -10,17 +11,6 @@ namespace TenXOne.Models.Repositories
 
         public FinancialItemsRepository() {
             FinancialItems = new List<FinancialItem>();
-            CreateFinancialItemsData();
-        }
-        private void CreateFinancialItemsData() {
-            var partnersRepository = new PartnersRepository();
-            var partners = partnersRepository.GetPartnerList();
-            FinancialItems.Add(new FinancialItem {
-                FinancialItemID = Guid.NewGuid(),
-                Partner = partners.First(x => x.PartnerID == 1),
-                Date = new DateTime(2010, 1, 1),
-                Amount = 5
-            });
         }
         public IList<FinancialItem> GetAllFinancialItems()
         {    
@@ -47,6 +37,10 @@ namespace TenXOne.Models.Repositories
         public void DeleteFinancialItem(Guid itemID)
         {
             FinancialItems.Remove(FinancialItems.FirstOrDefault(x => x.FinancialItemID == itemID));
+        }
+
+        public void DeleteAllFinancialItems() {
+            FinancialItems = new List<FinancialItem>();
         }
     }
 }

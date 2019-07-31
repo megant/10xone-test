@@ -11,7 +11,7 @@ namespace TenXOne.Services
         private readonly IPartnersRepository _partnersRepository;
         private readonly IFinancialItemsRepository _financialItemsRepository;
         private IDictionary<decimal, PartnerNode> PartnerNodeList;
-        public StatisticsService(IPartnersRepository partnersRepository, IFinancialItemsRepository financialItemsRepository)
+        public StatisticsService(IFinancialItemsRepository financialItemsRepository, IPartnersRepository partnersRepository)
         {
             _financialItemsRepository = financialItemsRepository;
             _partnersRepository = partnersRepository;
@@ -56,7 +56,8 @@ namespace TenXOne.Services
         {
             var statisticItems = new List<StatisticItem>();
             foreach (var partnerNode in PartnerNodeList.Values) {
-                statisticItems.Add(CalculateStatisticItemData(partnerNode));
+                var statisticItem = CalculateStatisticItemData(partnerNode); 
+                statisticItems.Add(statisticItem);
             }
 
             return statisticItems;

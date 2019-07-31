@@ -18,6 +18,16 @@
 <div class="financial-items-container">
     <div class="page-header">
         <h1>@ViewData["Title"]</h1>
+        <a 
+            class="new-item-btn btn btn-danger ml-2" 
+            href
+            data-ajax="true" 
+            data-ajax-method="DELETE"
+            data-ajax-url="/FinancialItems/DeleteAll" 
+            data-ajax-update="#financial-items-list"
+            data-ajax-confirm="Are you sure you want to delete all items?">
+            <i class="fa fa-trash-alt fa-2x"></i>
+        </a>        
         <button 
             class="new-item-btn btn btn-warning" 
             data-toggle="collapse" 

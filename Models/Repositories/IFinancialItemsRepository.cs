@@ -9,5 +9,6 @@ namespace TenXOne.Models.Repositories
         void AddFinancialItem(FinancialItem newItem);
         void UpdateFinancialItem(FinancialItem updatedItem);
         void DeleteFinancialItem(Guid itemId);
+        void DeleteAllFinancialItems();
     }
 }
