@@ -8,7 +8,11 @@ namespace TenXOne.Models.Repositories
     {
         private IList<FinancialItem> FinancialItems;
 
-        public void CreateFinancialItemsData() {
+        public FinancialItemsRepository() {
+            FinancialItems = new List<FinancialItem>();
+            CreateFinancialItemsData();
+        }
+        private void CreateFinancialItemsData() {
             var partnersRepository = new PartnersRepository();
             var partners = partnersRepository.GetPartnerList();
             FinancialItems.Add(new FinancialItem {
@@ -18,13 +22,13 @@ namespace TenXOne.Models.Repositories
                 Amount = 5
             });
         }
-        public IList<FinancialItem> GetFinancialItems()
+        public IList<FinancialItem> GetAllFinancialItems()
         {    
-            if (FinancialItems == null) {
-                FinancialItems = new List<FinancialItem>();
-                CreateFinancialItemsData();
-            }
             return FinancialItems;
+        }
+
+        public IList<FinancialItem> GetFinancialItems(decimal partnerID) {
+            return FinancialItems.Where(x => x.PartnerID == partnerID).ToList();
         }
 
         public void AddFinancialItem(FinancialItem newItem) {

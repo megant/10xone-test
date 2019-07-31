@@ -28,7 +28,7 @@ namespace TenXOne.Services
 
         public IList<FinancialItem> GetAllItems()
         {
-            return _financialItemsRepository.GetFinancialItems();
+            return _financialItemsRepository.GetAllFinancialItems();
         }
 
         public void AddItem(decimal partnerID, DateTime date, decimal amount) {

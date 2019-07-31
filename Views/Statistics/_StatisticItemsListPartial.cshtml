@@ -1,0 +1,22 @@
+@model TenXOne.ViewModels.StatisticsViewModel
+
+@{int rowNum = 1;}
+    @foreach(var item in @Model.StatisticItems)
+    {            
+        <tr class="financial-item">
+            <th scope="row">@rowNum</th>
+            <td>
+                @item.PartnerName
+            </td>
+            <td>
+                @item.TeamPurchase
+            </td>
+            <td>
+                @item.TotalPurchase
+            </td>
+            <td>
+                @item.TotalComission
+            </td>
+        </tr>    
+        rowNum++;
+    }

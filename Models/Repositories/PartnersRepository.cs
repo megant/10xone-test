@@ -1,4 +1,3 @@
-using System.Reflection.PortableExecutable;
 using System.Linq;
 using System.Collections.Generic;
 using System;
@@ -8,17 +7,14 @@ namespace TenXOne.Models.Repositories
 {
     public class PartnersRepository : IPartnersRepository
     {
-        private IList<PartnerNode> PartnerTree;
-        private IList<decimal> Parents;
-
+        private IDictionary<decimal, PartnerNode> PartnerNodeList;
+        private IList<Partner> PartnerList;
+        private IList<decimal> AvailableParents;
         public PartnersRepository() {
-            Parents = new List<decimal>();
-            PartnerTree = new List<PartnerNode>();
-            CreatePartnerTree();
-        }
-
-        private string GetParent() {
-            return "";
+            AvailableParents = new List<decimal>();
+            PartnerNodeList = new Dictionary<decimal, PartnerNode>();
+            PartnerList = new List<Partner>();
+            CreatePartners();
         }
 
         private decimal GetFeePercent() {
@@ -28,30 +24,65 @@ namespace TenXOne.Models.Repositories
         }
 
         private void AddPartnerNode(Partner partner) {
-            Parents.Add(partner.PartnerID);
-            PartnerTree.Add(new PartnerNode {
-                Partner = partner
+            var randomGenerator = new Random();
+            decimal? parentPartnerID = null;
+
+            if (AvailableParents.Count > 0) {
+                var randomIndex = randomGenerator.Next(AvailableParents.Count);
+                parentPartnerID = AvailableParents[randomIndex];
+            } 
+
+            AvailableParents.Add(partner.PartnerID);
+            PartnerNodeList.Add(partner.PartnerID, new PartnerNode {
+                PartnerID = partner.PartnerID,
+                ParentPartnerID = parentPartnerID,
+                PartnerName = partner.Name,
+                FeePercent = GetFeePercent(),
+                Children = new List<decimal>(),
+                Descendants = new List<decimal>()
             });
         }
 
         private void CreatePartnerNode(string name) {
-            var partnerID = PartnerTree.Count() + 1;
-            var randomGenerator = new Random();
-            decimal? parentPartnerID = null;
-            if (Parents.Count > 0) {
-                var randomIndex = randomGenerator.Next(Parents.Count);
-                parentPartnerID = Parents[randomIndex];
-            } 
-            
-            AddPartnerNode(new Partner {
+            var partnerID = PartnerNodeList.Count() + 1;
+            var partner = new Partner {
                 PartnerID = partnerID,
-                Name = name,
-                FeePercent = GetFeePercent(),
-                ParentPartnerID = parentPartnerID
-            });
+                Name = name
+            };
+            PartnerList.Add(partner);
+            AddPartnerNode(partner);
         }
 
-        public void CreatePartnerTree() {
+        private void CollectPartnerNodeChildren() {
+            foreach(KeyValuePair<decimal, PartnerNode> partnerNode in PartnerNodeList)
+            {
+                if (partnerNode.Value.ParentPartnerID != null) {
+                    PartnerNodeList[(decimal)partnerNode.Value.ParentPartnerID].Children.Add(partnerNode.Value.PartnerID);
+                }
+            }
+        }
+
+        private void CollectPartnerNodeDescendants(IList<decimal> ancestorPartnerIDs, PartnerNode partnerNode) {
+            if (partnerNode.Children.Count > 0) {
+                var newAncestorPartnerIDs = ancestorPartnerIDs.ToList();
+                newAncestorPartnerIDs.Add(partnerNode.PartnerID);
+                foreach (var ancestorPartnerID in newAncestorPartnerIDs) {
+                    foreach (var childPartnerID in partnerNode.Children) {
+                        if (!PartnerNodeList[ancestorPartnerID].Descendants.Contains(childPartnerID)) {
+                            PartnerNodeList[ancestorPartnerID].Descendants.Add(childPartnerID);
+                        }
+                        CollectPartnerNodeDescendants(newAncestorPartnerIDs, PartnerNodeList[childPartnerID]);
+                    }
+                }
+            }
+        }
+
+        private void BuildChildBranches() {
+            CollectPartnerNodeChildren();
+            var topParent = PartnerNodeList.Values.First(x => x.ParentPartnerID == null);
+            CollectPartnerNodeDescendants(new List<decimal>(), topParent);
+        }
+        private void CreatePartners() {
             string[] names = {
                 "John McDonalds",
                 "Matt Damon",
@@ -66,19 +97,15 @@ namespace TenXOne.Models.Repositories
             var orderedNames = names.OrderBy(x => rnd.Next()).ToArray();
 
             Array.ForEach(orderedNames, name => CreatePartnerNode(name));
-        }
-        public IList<PartnerNode> GetPartnerTree() {    
-            if (PartnerTree.Count() == 0) {
-                CreatePartnerTree();
-            }
-            return PartnerTree;
+            BuildChildBranches();
         }
 
         public IList<Partner> GetPartnerList() {
-            return PartnerTree.Select(x => new Partner {
-                PartnerID = x.Partner.PartnerID,
-                Name = x.Partner.Name
-            }).ToList();
+            return PartnerList;
+        }
+
+        public IDictionary<decimal, PartnerNode> GetPartnerNodeList() {
+            return PartnerNodeList;
         }
     }
 }

@@ -2943,8 +2943,18 @@
   "RootNamespace": "_10xone",
   "Documents": [
     {
+      "FilePath": "Views/Statistics/_StatisticItemsListPartial.cshtml",
+      "TargetPath": "Views/Statistics/_StatisticItemsListPartial.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "Views/FinancialItems/Index.cshtml",
       "TargetPath": "Views/FinancialItems/Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "Views/Statistics/Index.cshtml",
+      "TargetPath": "Views/Statistics/Index.cshtml",
       "FileKind": "mvc"
     },
     {

@@ -1,19 +1,23 @@
+using System.Collections.Generic;
+
 namespace TenXOne.Models
 {
     public class PartnerNode
     {
         public PartnerNode() {}
-        public PartnerNode(decimal left, decimal right, decimal depth, Partner partner)
-        {
-            this.Left = left;
-            this.Right = right;
-            this.Depth = depth;
-            this.Partner = partner;
 
+        public PartnerNode(decimal PartnerID, decimal? ParentPartnerID, string PartnerName, decimal FeePercent, IList<decimal> ChildBranch)
+        {
+            this.PartnerID = PartnerID;
+            this.ParentPartnerID = ParentPartnerID;
+            this.PartnerName = PartnerName;
+            this.Children = ChildBranch;
         }
-        public decimal Left { get; set; }
-        public decimal Right { get; set; }
-        public decimal Depth { get; set; }
-        public Partner Partner { get; set; }
+        public decimal PartnerID { get; set; }
+        public decimal? ParentPartnerID { get; set; }
+        public string PartnerName { get; set; }
+        public decimal FeePercent { get; set; }
+        public IList<decimal> Children { get; set; }
+        public IList<decimal> Descendants { get; set; }
     }
 }

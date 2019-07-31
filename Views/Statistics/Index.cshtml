@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Statistics";
+}
+<div class="statistics-container">
+    <div class="page-header">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="statistic-items-container container mt-4">
+        <div class="row">
+            <a 
+                class="btn btn-info"
+                href
+                data-ajax="true" 
+                data-ajax-url="/Statistics/Show" 
+                data-ajax-update="#statistic-items-list">Show me the statistics
+            </a>
+        </div>
+        <div class="row mt-4">
+            <table class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            #
+                        </th>
+                        <th scope="col">
+                            Partner
+                        </th>
+                        <th scope="col">
+                            Team Purchase
+                        </th>
+                        <th scope="col">
+                            Total Purchase
+                        </th>
+                        <th>
+                            Total Comission
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="statistic-items-list">
+                </tbody>            
+            </table>
+        </div>
+    </div>
+</div>
